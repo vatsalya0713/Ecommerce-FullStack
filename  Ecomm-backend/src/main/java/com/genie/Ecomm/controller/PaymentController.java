@@ -33,7 +33,7 @@ public class PaymentController {
         return razorpayClient.orders.create(orderRequest).toString();
     }
 
-    // This is the corrected verifyPayment method
+
     @PostMapping("/api/verify-payment")
     public String verifyPayment(@RequestBody Map<String, String> data) throws RazorpayException {
         String paymentId = data.get("razorpay_payment_id");

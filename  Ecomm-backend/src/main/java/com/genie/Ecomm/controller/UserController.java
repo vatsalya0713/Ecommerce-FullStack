@@ -35,20 +35,20 @@ public class UserController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<LoginResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        // Provided username aur password ke saath user ko authenticate karein
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
 
-        // Authenticated user ko security context mein set karein
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // JWT token generate karein
+
         String jwtToken = jwtUtil.generateToken((UserDetails) authentication.getPrincipal());
-        // Response mein token return karein
+
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
-        // 5. Return the response with the token
+
         return ResponseEntity.ok(loginResponse);
     }
 

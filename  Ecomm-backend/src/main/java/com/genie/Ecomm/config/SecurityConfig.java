@@ -34,13 +34,13 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    // PasswordEncoder Bean
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // AuthenticationProvider Bean
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -49,7 +49,7 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    // AuthenticationManager Bean
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

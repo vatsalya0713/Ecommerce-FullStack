@@ -33,8 +33,8 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername()) // sirf username
-                .setIssuedAt(new Date())                // kab issue hua
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hrs expiry
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256) // secret key + algo
                 .compact();

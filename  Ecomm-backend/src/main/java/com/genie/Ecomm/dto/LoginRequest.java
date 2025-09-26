@@ -10,7 +10,7 @@ public class LoginRequest {
         this.email = email;
     }
 
-    // Getters and Setters
+
     public String getUsername() {
         return username;
     }
