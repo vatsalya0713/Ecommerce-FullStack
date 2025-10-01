@@ -3,9 +3,9 @@ version: '3.8'
 services:
   # 1. Spring Boot Backend Application
   backend-app:
-    # Dockerfile का स्थान (यह मानता है कि Dockerfile इसी फोल्डर में है)
+    # Dockerfile का स्थान (अब रूट से Ecomm-backend फ़ोल्डर को पॉइंट करेगा)
     build:
-      context: Ecomm-Backend
+      context: ./Ecomm-Backend
     # Image को एक नाम दें
     image: ecomm-backend-vatsalya:latest
     container_name: ecomm-app-container
@@ -38,7 +38,7 @@ services:
       timeout: 10s
       retries: 3
 
-  # 2. MySQL Database Service (DEPLOYMENT के लिए अपडेट किया गया)
+  # 2. MySQL Database Service (FIXED: volumes को disks से बदला गया)
   mysql-db:
     image: mysql:8.0
     container_name: ecommerce-mysql-db
@@ -47,13 +47,11 @@ services:
       # डेटाबेस को सेट अप करने के लिए Environment Variables
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: ecommerce
-    # RENDER पर डेटा को स्थायी रखने के लिए वॉल्यूम को डिस्क नाम से बदलें
-    volumes:
-      - render-mysql-disk:/var/lib/mysql # <-- यह नया स्थायी वॉल्यूम है
 
-    # Render पर Publicly Accessible पोर्ट न खोलें
-    # ports:
-    #   - "3306:3306"
+    # RENDER BLUEPRINT FIX: 'volumes' की जगह 'disks' का उपयोग करें
+    disks:
+      - name: render-mysql-disk
+        mountPath: /var/lib/mysql # MySQL डेटा का डिफ़ॉल्ट स्टोरेज पाथ
 
   # 3. FRONTEND SERVICE (Static HTML/CSS/JS के लिए जोड़ा गया)
   frontend-app:
@@ -71,6 +69,4 @@ services:
     depends_on:
       - backend-app
 
-# Docker Volumes: डेटाबेस डेटा को आपके होस्ट मशीन/Render Disk पर स्थायी रूप से स्टोर करने के लिए
-volumes:
-  render-mysql-disk: # <-- नया वॉल्यूम नाम (Render Disk के लिए)
+# NOTE: ग्लोबल 'volumes' ब्लॉक को हटा दिया गया है क्योंकि यह Render में 'disks' से ओवरलैप करता है।
