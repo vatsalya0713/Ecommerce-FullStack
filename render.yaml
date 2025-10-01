@@ -22,12 +22,13 @@ services:
       - key: RAZORPAY_KEYSECRET
         value: PdrDVnYTDOqskKF6IIhh7ACs
 
-  # 2. MySQL Database
+  # 2. MySQL Database (Persistent Service)
   - type: pserv
     name: mysql-db
     env: docker
     plan: free
-    image: mysql:8.0
+    dockerContext: .
+    dockerfilePath: ./Dockerfile-mysql
     envVars:
       - key: MYSQL_ROOT_PASSWORD
         value: password
@@ -38,10 +39,3 @@ services:
       mountPath: /var/lib/mysql
       sizeGB: 10
 
-  # 3. Frontend App
-  - type: web
-    name: frontend-app
-    env: docker
-    plan: free
-    dockerContext: ./Ecomm-UI
-    dockerfilePath: ./Ecomm-UI/Dockerfile
