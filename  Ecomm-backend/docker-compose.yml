@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # 1. Spring Boot Backend Application
+  backend-app:
+    # Dockerfile का स्थान (यह मानता है कि Dockerfile इसी फोल्डर में है)
+    build:
+      context: .
+    # Image को एक नाम दें
+    image: ecomm-backend-vatsalya:latest
+    container_name: ecomm-app-container
+
+    # पोर्ट मैपिंग: होस्ट (Localhost) पोर्ट 9090 को कंटेनर पोर्ट 9090 से जोड़ेगा
+    ports:
+      - "9090:9090"
+
+    # MySQL कंटेनर के चलने का इंतज़ार करेगा
+    depends_on:
+      - mysql-db
+
+    # Environment Variables: यही वह जगह है जहाँ हम DATASOURCE URL को ठीक करते हैं
+    environment:
+      # डेटाबेस URL में 'localhost' के बजाय 'mysql-db' (कंटेनर का नाम) का उपयोग करें
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/ecommerce
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+
+      # आपके अन्य ज़रूरी कॉन्फ़िगरेशन वेरिएबल्स
+      SERVER_PORT: 9090
+      JWT_KEY_SECRET: A_Very_Unique_And_Strong_Secret_Key_For_Your_Project_123456789
+      RAZORPAY_KEYID: rzp_test_RF6hzq0v3uw8Ej
+      RAZORPAY_KEYSECRET: PdrDVnYTDOqskKF6IIhh7ACs
+
+    # JAR फ़ाइल बिल्ड होने का इंतज़ार करने के लिए हेल्थ चेक (ज़रूरी नहीं, पर अच्छा है)
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/actuator/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  # 2. MySQL Database Service
+  mysql-db:
+    image: mysql:8.0
+    container_name: ecommerce-mysql-db
+    restart: always # अगर कंटेनर क्रैश होता है तो फिर से शुरू करें
+    environment:
+      # डेटाबेस को सेट अप करने के लिए Environment Variables
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ecommerce
+    # डेटा को कंटेनर डिलीट होने पर भी सुरक्षित रखने के लिए वॉल्यूम (Volume)
+    volumes:
+      - db-data:/var/lib/mysql
+
+# Docker Volumes: डेटाबेस डेटा को आपके होस्ट मशीन पर स्थायी रूप से स्टोर करने के लिए
+volumes:
+  db-data:
