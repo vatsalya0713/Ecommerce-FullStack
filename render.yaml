@@ -1,5 +1,4 @@
 services:
-  # 1. Spring Boot Backend
   - type: web
     name: backend-app
     env: docker
@@ -8,34 +7,16 @@ services:
     dockerfilePath: ./Ecomm-Backend/Dockerfile
     envVars:
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:mysql://mysql-db:3306/ecommerce
+        value: jdbc:mysql://hopper.proxy.rlwy.net:49127/railway?useSSL=false&serverTimezone=UTC
       - key: SPRING_DATASOURCE_USERNAME
         value: root
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        value: <your-railway-password>
       - key: SERVER_PORT
         value: 9090
       - key: JWT_KEY_SECRET
-        value: A_Very_Unique_And_Strong_Secret_KEY_FOR_YOUR_PROJECT_123456789
+        value: A_Very_Unique_And_Strong_Secret_Key_For_Your_Project_123456789
       - key: RAZORPAY_KEYID
         value: rzp_test_RF6hzq0v3uw8Ej
       - key: RAZORPAY_KEYSECRET
         value: PdrDVnYTDOqskKF6IIhh7ACs
-
-  # 2. MySQL Database (Persistent Service)
-  - type: pserv
-    name: mysql-db
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: ./Dockerfile-mysql
-    envVars:
-      - key: MYSQL_ROOT_PASSWORD
-        value: password
-      - key: MYSQL_DATABASE
-        value: ecommerce
-    disk:
-      name: mysql-disk
-      mountPath: /var/lib/mysql
-      sizeGB: 10
-
