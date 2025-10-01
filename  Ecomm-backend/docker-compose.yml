@@ -20,14 +20,14 @@ services:
 
     # Environment Variables: यही वह जगह है जहाँ हम DATASOURCE URL को ठीक करते हैं
     environment:
-      # डेटाबेस URL में 'localhost' के बजाय 'mysql-db' (कंटेनर का नाम) का उपयोग करें
+      # Render पर भी डेटाबेस कंटेनर का नाम 'mysql-db' ही रहेगा
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/ecommerce
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
 
       # आपके अन्य ज़रूरी कॉन्फ़िगरेशन वेरिएबल्स
       SERVER_PORT: 9090
-      JWT_KEY_SECRET: A_Very_Unique_And_Strong_Secret_Key_For_Your_Project_123456789
+      JWT_KEY_SECRET: A_Very_Unique_And_Strong_Secret_KEY_FOR_YOUR_PROJECT_123456789
       RAZORPAY_KEYID: rzp_test_RF6hzq0v3uw8Ej
       RAZORPAY_KEYSECRET: PdrDVnYTDOqskKF6IIhh7ACs
 
@@ -38,7 +38,7 @@ services:
       timeout: 10s
       retries: 3
 
-  # 2. MySQL Database Service
+  # 2. MySQL Database Service (DEPLOYMENT के लिए अपडेट किया गया)
   mysql-db:
     image: mysql:8.0
     container_name: ecommerce-mysql-db
@@ -47,10 +47,30 @@ services:
       # डेटाबेस को सेट अप करने के लिए Environment Variables
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: ecommerce
-    # डेटा को कंटेनर डिलीट होने पर भी सुरक्षित रखने के लिए वॉल्यूम (Volume)
+    # RENDER पर डेटा को स्थायी रखने के लिए वॉल्यूम को डिस्क नाम से बदलें
     volumes:
-      - db-data:/var/lib/mysql
+      - render-mysql-disk:/var/lib/mysql # <-- यह नया स्थायी वॉल्यूम है
 
-# Docker Volumes: डेटाबेस डेटा को आपके होस्ट मशीन पर स्थायी रूप से स्टोर करने के लिए
+    # Render पर Publicly Accessible पोर्ट न खोलें
+    # ports:
+    #   - "3306:3306"
+
+  # 3. FRONTEND SERVICE (Static HTML/CSS/JS के लिए जोड़ा गया)
+  frontend-app:
+    # Build context को Ecomm-UI फ़ोल्डर में सेट करें (यहाँ Dockerfile होना चाहिए)
+    build:
+      context: ./Ecomm-UI
+    image: ecomm-frontend-vatsalya:latest
+    container_name: ecomm-frontend-container
+
+    # पोर्ट मैपिंग: लोकलहोस्ट पोर्ट 3000 को कंटेनर पोर्ट 80 (Nginx) से जोड़ेगा
+    ports:
+      - "3000:80"
+
+    # Backend के बाद ही Frontend को शुरू करें
+    depends_on:
+      - backend-app
+
+# Docker Volumes: डेटाबेस डेटा को आपके होस्ट मशीन/Render Disk पर स्थायी रूप से स्टोर करने के लिए
 volumes:
-  db-data:
+  render-mysql-disk: # <-- नया वॉल्यूम नाम (Render Disk के लिए)
