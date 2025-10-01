@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af4b5aa5-44a9-482e-bc51-32e65430741c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Ecomm-Backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Ecomm-Backend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Ecomm-Backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Ecomm-Backend/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../render.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../render.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
