@@ -1,61 +1,47 @@
-version: '3.8'
-
 services:
-  # 1. Spring Boot Backend Application
-  backend-app:
-    # Dockerfile का स्थान (अब रूट से Ecomm-backend फ़ोल्डर को पॉइंट करेगा)
-    build:
-      context: ./Ecomm-Backend
-    # Image को एक नाम दें
-    image: ecomm-backend-vatsalya:latest
-    container_name: ecomm-app-container
+  # 1. Spring Boot Backend
+  - type: web
+    name: backend-app
+    env: docker
+    plan: free
+    dockerContext: ./Ecomm-Backend
+    dockerfilePath: ./Ecomm-Backend/Dockerfile
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://mysql-db:3306/ecommerce
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: SERVER_PORT
+        value: 9090
+      - key: JWT_KEY_SECRET
+        value: A_Very_Unique_And_Strong_Secret_KEY_FOR_YOUR_PROJECT_123456789
+      - key: RAZORPAY_KEYID
+        value: rzp_test_RF6hzq0v3uw8Ej
+      - key: RAZORPAY_KEYSECRET
+        value: PdrDVnYTDOqskKF6IIhh7ACs
 
-    # MySQL कंटेनर के चलने का इंतज़ार करेगा
-    depends_on:
-      - mysql-db
-
-    # Environment Variables: यही वह जगह है जहाँ हम DATASOURCE URL को ठीक करते हैं
-    environment:
-      # Render पर भी डेटाबेस कंटेनर का नाम 'mysql-db' ही रहेगा
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/ecommerce
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: password
-
-      # आपके अन्य ज़रूरी कॉन्फ़िगरेशन वेरिएबल्स
-      SERVER_PORT: 9090
-      JWT_KEY_SECRET: A_Very_Unique_And_Strong_Secret_KEY_FOR_YOUR_PROJECT_123456789
-      RAZORPAY_KEYID: rzp_test_RF6hzq0v3uw8Ej
-      RAZORPAY_KEYSECRET: PdrDVnYTDOqskKF6IIhh7ACs
-
-      # HEALTHCHECK REMOVED (पार्सिंग एरर को ठीक करने के लिए)
-
-  # 2. MySQL Database Service (FIXED: volumes को disks से बदला गया)
-  mysql-db:
+  # 2. MySQL Database
+  - type: pserv
+    name: mysql-db
+    env: docker
+    plan: free
     image: mysql:8.0
-    container_name: ecommerce-mysql-db
-    restart: always # अगर कंटेनर क्रैश होता है तो फिर से शुरू करें
-    environment:
-      # डेटाबेस को सेट अप करने के लिए Environment Variables
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: ecommerce
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        value: password
+      - key: MYSQL_DATABASE
+        value: ecommerce
+    disk:
+      name: mysql-disk
+      mountPath: /var/lib/mysql
+      sizeGB: 10
 
-    # RENDER BLUEPRINT FIX: 'volumes' की जगह 'disks' का उपयोग करें
-    disks:
-      - name: render-mysql-disk
-        mountPath: /var/lib/mysql # MySQL डेटा का डिफ़ॉल्ट स्टोरेज पाथ
-
-  # 3. FRONTEND SERVICE (Static HTML/CSS/JS के लिए जोड़ा गया)
-  frontend-app:
-    # Build context को Ecomm-UI फ़ोल्डर में सेट करें (यहाँ Dockerfile होना चाहिए)
-    build:
-      context: ./Ecomm-UI
-    image: ecomm-frontend-vatsalya:latest
-    container_name: ecomm-frontend-container
-
-    # PORTS REMOVED (RENDER STATIC SITES के लिए अनावश्यक)
-    # ports:
-    #   - "3000:80"
-
-    # Backend के बाद ही Frontend को शुरू करें
-    depends_on:
-      - backend-app
+  # 3. Frontend App
+  - type: web
+    name: frontend-app
+    env: docker
+    plan: free
+    dockerContext: ./Ecomm-UI
+    dockerfilePath: ./Ecomm-UI/Dockerfile
