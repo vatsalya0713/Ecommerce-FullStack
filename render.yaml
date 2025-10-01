@@ -10,9 +10,9 @@ services:
     image: ecomm-backend-vatsalya:latest
     container_name: ecomm-app-container
 
-    # पोर्ट मैपिंग: होस्ट (Localhost) पोर्ट 9090 को कंटेनर पोर्ट 9090 से जोड़ेगा
-    ports:
-      - "9090:9090"
+      # पोर्ट मैपिंग: RENDER AUTOMATICALLY HANDLES PORT MAPPING
+      # ports:  <-- यह ब्लॉक हटा दिया गया है
+      #   - "9090:9090"
 
     # MySQL कंटेनर के चलने का इंतज़ार करेगा
     depends_on:
@@ -61,7 +61,7 @@ services:
     image: ecomm-frontend-vatsalya:latest
     container_name: ecomm-frontend-container
 
-    # पोर्ट मैपिंग: लोकलहोस्ट पोर्ट 3000 को कंटेनर पोर्ट 80 (Nginx) से जोड़ेगा
+    # पोर्ट मैपिंग: LOCAL TESTING के लिए ज़रूरी है, पर RENDER पर इसे SKIP कर सकते हैं
     ports:
       - "3000:80"
 
