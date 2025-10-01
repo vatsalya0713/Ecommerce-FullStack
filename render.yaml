@@ -5,7 +5,7 @@ services:
   backend-app:
     # Dockerfile का स्थान (यह मानता है कि Dockerfile इसी फोल्डर में है)
     build:
-      context: .
+      context: Ecomm-Backend
     # Image को एक नाम दें
     image: ecomm-backend-vatsalya:latest
     container_name: ecomm-app-container
