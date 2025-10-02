@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:9090"
+const BASE_URL = "https://backend-app-6h8m.onrender.com"
 async function loadProducts() {
     try {
         // Fetch products from the API

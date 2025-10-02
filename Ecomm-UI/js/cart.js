@@ -119,7 +119,7 @@ async function openPaymentGateway() {
     }
 
     // 1. Get user data from backend, JWT token ke saath
-    const userResponse = await fetch('http://localhost:9090/api/users/profile', {
+    const userResponse = await fetch('https://backend-app-6h8m.onrender.com/api/users/profile', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ async function openPaymentGateway() {
     let totalAmount = parseFloat(totalAmountString.replace('₹ ', ''));
 
     // 3. Create the order on the backend
-    const orderResponse = await fetch('http://localhost:9090/api/create-order', {
+    const orderResponse = await fetch('https://backend-app-6h8m.onrender.com/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ async function openPaymentGateway() {
 }
 
 function verifyPayment(response) {
-  fetch('http://localhost:9090/api/verify-payment', {
+  fetch('https://backend-app-6h8m.onrender.com/api/verify-payment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
