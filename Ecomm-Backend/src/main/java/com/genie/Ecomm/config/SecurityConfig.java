@@ -82,7 +82,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/authenticate", ,"/api/users/register", "/products/addProduct",  "/api/create-order",
+                        .requestMatchers("/api/users/authenticate", "/api/users/register", "/products/addProduct",  "/api/create-order",
                                 "/api/verify-payment").permitAll()
                         .requestMatchers("/api/users/profile").authenticated() // Ye endpoint sirf authenticated users ke liye hai
                         .anyRequest().authenticated()
