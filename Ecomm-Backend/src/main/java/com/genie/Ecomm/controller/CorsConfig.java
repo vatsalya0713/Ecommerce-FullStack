@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://127.0.0.1:5500","https://ecommerce-fullstack-uq1h.onrender.com")
+                .allowedOriginPatterns("http://127.0.0.1:*", "https://ecommerce-fullstack-uq1h.onrender.com", "*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
