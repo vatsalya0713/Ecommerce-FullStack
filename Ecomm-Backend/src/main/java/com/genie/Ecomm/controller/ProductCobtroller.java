@@ -31,6 +31,12 @@ public class ProductCobtroller {
         return productService.addProduct(product);
     }
 
+
+    @PostMapping("/addProducts")
+    public List<Product> addProducts(@RequestBody List<Product> products) {
+        return productService.addProducts(products);
+    }
+
     @DeleteMapping("/{id}")
     public void deletProduct(@PathVariable Long id){
         productService.deletProduct(id);

@@ -20,10 +20,16 @@ public class ProductService {
 
     return   productRepository.findById(id).orElse(null);
     }
-
+ // single product add
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
+
+    // ✅ multiple products add
+    public List<Product> addProducts(List<Product> products) {
+        return productRepository.saveAll(products);
+    }
+
 
     public void deletProduct(Long id) {
         productRepository.deleteById(id);
