@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +41,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -49,19 +49,19 @@ public class SecurityConfig {
         return authProvider;
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // CORS Configuration Bean
+    // ✅ CORS Configuration
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+
         configuration.setAllowedOriginPatterns(List.of(
-                "http://127.0.0.1:5500",
-                "http://localhost:3000",
+                "http://127.0.0.1:*",
+                "http://localhost:*",
                 "https://ecommerce-fullstack-uq1h.onrender.com"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -74,17 +74,20 @@ public class SecurityConfig {
         return source;
     }
 
-
-
-    // SecurityFilterChain ko configure karein
+    // ✅ Security Configuration
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/authenticate", "/api/users/register", "/products/addProduct",  "/api/create-order",
-                                "/api/verify-payment").permitAll()
-                        .requestMatchers("/api/users/profile").authenticated() // Ye endpoint sirf authenticated users ke liye hai
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/api/users/authenticate",
+                                "/api/users/register",
+                                "/products/addProduct",
+                                "/api/create-order",
+                                "/api/verify-payment"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
