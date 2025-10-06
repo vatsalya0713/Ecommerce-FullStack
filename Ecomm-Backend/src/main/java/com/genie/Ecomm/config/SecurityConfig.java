@@ -87,6 +87,7 @@ public class SecurityConfig {
                                 "/products/addProduct",
                                 "/api/create-order",
                                 "/api/verify-payment",
+                                "/products",
                                 "/products/MultipleaddProducts"
                         ).permitAll()
                         .anyRequest().authenticated()
