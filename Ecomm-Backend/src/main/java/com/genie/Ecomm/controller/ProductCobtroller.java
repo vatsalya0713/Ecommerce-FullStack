@@ -32,7 +32,7 @@ public class ProductCobtroller {
     }
 
 
-    @PostMapping("/addProducts")
+    @PostMapping("/MultipleaddProducts")
     public List<Product> addProducts(@RequestBody List<Product> products) {
         return productService.addProducts(products);
     }
