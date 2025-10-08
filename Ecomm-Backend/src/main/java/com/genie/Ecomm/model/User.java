@@ -13,14 +13,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    @NotBlank(message = "Name cannot be blank")
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "Name must contain only letters")
     private String name ;
+
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Please enter a valid email address")
     private String email;
+    @NotBlank(message = "Contact cannot be blank")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Contact number must be exactly 10 digits")
     private String contact;
+
+    @NotBlank(message = "Password cannot be blank")
     private String username;
 
 
-
+    @NotBlank(message = "Password cannot be blank")
     private String password;
     @ManyToMany(fetch =FetchType.EAGER)
     @JoinTable (

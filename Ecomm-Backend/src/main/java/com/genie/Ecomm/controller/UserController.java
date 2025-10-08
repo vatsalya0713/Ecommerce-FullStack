@@ -5,6 +5,7 @@ import com.genie.Ecomm.dto.LoginResponse;
 import com.genie.Ecomm.model.User;
 import com.genie.Ecomm.util.JwtUtil;
 import com.genie.Ecomm.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,9 +55,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody User user){
-        return userService.registerUser(user);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
+
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        User savedUser = userService.registerUser(user);
+        return ResponseEntity.ok(savedUser);
     }
+
 
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers(){

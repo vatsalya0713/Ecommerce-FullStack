@@ -142,9 +142,9 @@ body {
    Product Card Images (यह वह हिस्सा है जहाँ मैंने बदलाव किया है)
    ======================= */
 .product-grid .card .card-img-top {
-  height: 150px; /* <--- यहाँ 200px से 250px कर दिया गया है */
+  height: 200px; /* <--- यहाँ 200px से 250px कर दिया गया है */
   object-fit: cover;
-  width: 800%;
+  width: 700%;
   transition: transform 0.3s ease-in-out;
 }
 
